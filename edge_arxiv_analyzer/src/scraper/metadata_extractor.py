@@ -19,16 +19,21 @@ class MetadataExtractor:
 
     def __init__(self):
         """Initialize metadata extractor."""
-        # Download required NLTK data
+        # Download required NLTK data if not already present
+        # Provide user feedback during first-time setup
         try:
             nltk.data.find('tokenizers/punkt')
         except LookupError:
-            nltk.download('punkt', quiet=True)
+            logger.info("Downloading NLTK punkt tokenizer (first-time setup)...")
+            nltk.download('punkt', quiet=False)
+            logger.info("NLTK punkt tokenizer downloaded successfully")
 
         try:
             nltk.data.find('corpora/stopwords')
         except LookupError:
-            nltk.download('stopwords', quiet=True)
+            logger.info("Downloading NLTK stopwords corpus (first-time setup)...")
+            nltk.download('stopwords', quiet=False)
+            logger.info("NLTK stopwords downloaded successfully")
 
         self.stop_words = set(stopwords.words('english'))
 
@@ -152,38 +157,12 @@ class MetadataExtractor:
         Returns:
             str: Research type category
         """
+        from ..utils.config import Config
+
         text = f"{paper.get('title', '')} {paper.get('abstract', '')}".lower()
 
-        # Define patterns for different research types
-        categories = {
-            "Machine Learning": [
-                "machine learning", "deep learning", "neural network",
-                "reinforcement learning", "supervised learning", "federated learning"
-            ],
-            "Systems": [
-                "system design", "architecture", "implementation", "prototype",
-                "framework", "platform"
-            ],
-            "Networking": [
-                "network", "protocol", "routing", "5G", "6G", "SDN", "NFV",
-                "communication"
-            ],
-            "Optimization": [
-                "optimization", "algorithm", "scheduling", "resource allocation",
-                "genetic algorithm", "heuristic"
-            ],
-            "Security": [
-                "security", "privacy", "authentication", "encryption",
-                "attack", "threat"
-            ],
-            "Theory": [
-                "theoretical", "mathematical", "model", "analysis", "proof",
-                "game theory"
-            ],
-            "Survey": [
-                "survey", "review", "taxonomy", "literature", "state-of-the-art"
-            ],
-        }
+        # Use categories from configuration (now configurable)
+        categories = Config.RESEARCH_TYPE_CATEGORIES
 
         # Count matches for each category
         category_scores = {}

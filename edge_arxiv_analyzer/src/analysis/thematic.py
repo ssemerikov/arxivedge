@@ -20,9 +20,13 @@ from nltk.tokenize import word_tokenize
 try:
     from sentence_transformers import SentenceTransformer
     SENTENCE_TRANSFORMERS_AVAILABLE = True
+    logger.info("sentence-transformers available - BERT-based analysis enabled")
 except ImportError:
     SENTENCE_TRANSFORMERS_AVAILABLE = False
-    logger.warning("sentence-transformers not available, BERT-based analysis will be skipped")
+    logger.warning(
+        "sentence-transformers not available - BERT-based semantic analysis will be skipped. "
+        "To enable: pip install sentence-transformers"
+    )
 
 
 class ThematicAnalyzer:
@@ -35,7 +39,10 @@ class ThematicAnalyzer:
         Args:
             papers: List of paper dictionaries
         """
+        from ..utils.config import Config
+
         self.papers = papers
+        self.config = Config()
         self.stop_words = set(stopwords.words('english'))
 
         # Add domain-specific stop words
@@ -90,8 +97,8 @@ class ThematicAnalyzer:
         vectorizer = CountVectorizer(
             max_features=max_features,
             stop_words='english',
-            min_df=2,
-            max_df=0.8,
+            min_df=self.config.TFIDF_MIN_DF,
+            max_df=self.config.TFIDF_MAX_DF,
         )
 
         doc_term_matrix = vectorizer.fit_transform(documents)
@@ -100,15 +107,15 @@ class ThematicAnalyzer:
         # LDA model
         lda_model = LatentDirichletAllocation(
             n_components=n_topics,
-            random_state=42,
-            max_iter=50,
+            random_state=self.config.KMEANS_RANDOM_STATE,
+            max_iter=self.config.LDA_MAX_ITER,
             learning_method='online',
         )
 
         lda_output = lda_model.fit_transform(doc_term_matrix)
 
         # Extract top words for each topic
-        n_top_words = 15
+        n_top_words = self.config.N_TOP_WORDS_PER_TOPIC
         topics = {}
         for topic_idx, topic in enumerate(lda_model.components_):
             top_words_idx = topic.argsort()[-n_top_words:][::-1]
@@ -166,8 +173,8 @@ class ThematicAnalyzer:
         vectorizer = TfidfVectorizer(
             max_features=max_features,
             stop_words='english',
-            min_df=2,
-            max_df=0.8,
+            min_df=self.config.TFIDF_MIN_DF,
+            max_df=self.config.TFIDF_MAX_DF,
         )
 
         tfidf_matrix = vectorizer.fit_transform(documents)
@@ -176,14 +183,14 @@ class ThematicAnalyzer:
         # NMF model
         nmf_model = NMF(
             n_components=n_topics,
-            random_state=42,
-            max_iter=200,
+            random_state=self.config.KMEANS_RANDOM_STATE,
+            max_iter=self.config.NMF_MAX_ITER,
         )
 
         nmf_output = nmf_model.fit_transform(tfidf_matrix)
 
         # Extract top words for each topic
-        n_top_words = 15
+        n_top_words = self.config.N_TOP_WORDS_PER_TOPIC
         topics = {}
         for topic_idx, topic in enumerate(nmf_model.components_):
             top_words_idx = topic.argsort()[-n_top_words:][::-1]
@@ -226,14 +233,18 @@ class ThematicAnalyzer:
         vectorizer = TfidfVectorizer(
             max_features=500,
             stop_words='english',
-            min_df=2,
-            max_df=0.8,
+            min_df=self.config.TFIDF_MIN_DF,
+            max_df=self.config.TFIDF_MAX_DF,
         )
 
         tfidf_matrix = vectorizer.fit_transform(documents)
 
         # K-Means clustering
-        kmeans = KMeans(n_clusters=n_clusters, random_state=42, n_init=10)
+        kmeans = KMeans(
+            n_clusters=n_clusters,
+            random_state=self.config.KMEANS_RANDOM_STATE,
+            n_init=self.config.KMEANS_N_INIT
+        )
         cluster_labels = kmeans.fit_predict(tfidf_matrix)
 
         # Analyze clusters
@@ -419,9 +430,9 @@ class ThematicAnalyzer:
         logger.info("Identifying research themes")
 
         results = {
-            "lda_topics": self.extract_topics_lda(n_topics=10),
-            "nmf_topics": self.extract_topics_nmf(n_topics=8),
-            "clusters": self.cluster_abstracts(n_clusters=8),
+            "lda_topics": self.extract_topics_lda(n_topics=self.config.N_TOPICS_LDA),
+            "nmf_topics": self.extract_topics_nmf(n_topics=self.config.N_TOPICS_NMF),
+            "clusters": self.cluster_abstracts(n_clusters=self.config.N_CLUSTERS),
             "emerging_topics": self.identify_emerging_topics(),
             "research_themes": self.analyze_research_themes(),
         }

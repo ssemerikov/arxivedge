@@ -73,7 +73,23 @@ class Config:
     MIN_KEYWORDS = 5
     MAX_KEYWORDS = 50
     N_TOPICS_LDA = 10
+    N_TOPICS_NMF = 8
     N_TOPICS_BERT = 8
+    N_CLUSTERS = 8
+
+    # TF-IDF and vectorization settings
+    TFIDF_MIN_DF = 2  # Minimum document frequency
+    TFIDF_MAX_DF = 0.8  # Maximum document frequency (80%)
+    TFIDF_MAX_FEATURES = 1000  # Maximum features for topic modeling
+
+    # Topic modeling settings
+    LDA_MAX_ITER = 50
+    NMF_MAX_ITER = 200
+    N_TOP_WORDS_PER_TOPIC = 15
+
+    # Clustering settings
+    KMEANS_N_INIT = 10
+    KMEANS_RANDOM_STATE = 42
 
     # Visualization settings
     FIGURE_DPI = 300
@@ -96,6 +112,37 @@ class Config:
     # Statistical settings
     SIGNIFICANCE_LEVEL = 0.05
     CONFIDENCE_INTERVAL = 0.95
+
+    # Research type classification keywords
+    RESEARCH_TYPE_CATEGORIES = {
+        "Machine Learning": [
+            "machine learning", "deep learning", "neural network",
+            "reinforcement learning", "supervised learning", "federated learning"
+        ],
+        "Systems": [
+            "system design", "architecture", "implementation", "prototype",
+            "framework", "platform"
+        ],
+        "Networking": [
+            "network", "protocol", "routing", "5G", "6G", "SDN", "NFV",
+            "communication"
+        ],
+        "Optimization": [
+            "optimization", "algorithm", "scheduling", "resource allocation",
+            "genetic algorithm", "heuristic"
+        ],
+        "Security": [
+            "security", "privacy", "authentication", "encryption",
+            "attack", "threat"
+        ],
+        "Theory": [
+            "theoretical", "mathematical", "model", "analysis", "proof",
+            "game theory"
+        ],
+        "Survey": [
+            "survey", "review", "taxonomy", "literature", "state-of-the-art"
+        ],
+    }
 
     # Logging settings
     LOG_LEVEL = "INFO"
