@@ -1,0 +1,83 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+ENV/
+env/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# Jupyter
+.ipynb_checkpoints
+*.ipynb
+
+# Output files (you may want to keep some)
+edge_arxiv_analyzer/output/data/*.json
+edge_arxiv_analyzer/output/data/*.csv
+edge_arxiv_analyzer/output/data/*.pkl
+edge_arxiv_analyzer/output/figures/*.png
+edge_arxiv_analyzer/output/figures/*.pdf
+edge_arxiv_analyzer/output/tables/*.tex
+edge_arxiv_analyzer/output/bibtex/*.bib
+edge_arxiv_analyzer/output/paper/*.aux
+edge_arxiv_analyzer/output/paper/*.log
+edge_arxiv_analyzer/output/paper/*.out
+edge_arxiv_analyzer/output/paper/*.toc
+edge_arxiv_analyzer/output/paper/*.blg
+edge_arxiv_analyzer/output/paper/*.bbl
+edge_arxiv_analyzer/output/*.log
+edge_arxiv_analyzer/output/*.yaml
+
+# LaTeX
+*.aux
+*.log
+*.out
+*.toc
+*.blg
+*.bbl
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+
+# Logs
+*.log
+logs/
+
+# Cache
+.cache/
+*.cache
