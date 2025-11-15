@@ -51,12 +51,19 @@ class BibliometricAnalyzer:
         # Sort by productivity
         top_authors = sorted(papers_per_author.items(), key=lambda x: x[1], reverse=True)
 
-        # Calculate h-index estimation (simplified)
+        # Calculate h-index estimation (simplified for new 2025 papers)
+        # Note: True h-index requires citation counts from external sources
+        # For 2025 papers with minimal citations, we use paper count as proxy
         h_index = {}
         for author, paper_list in author_papers.items():
-            # For true h-index, we'd need citation counts
-            # Here we use number of papers as proxy
-            h = min(len(paper_list), len(paper_list))  # Simplified
+            # Simplified h-index: for papers with no citation data,
+            # h-index approximates to sqrt(paper_count) or paper_count
+            # depending on career stage. For new papers, we use paper count.
+            num_papers = len(paper_list)
+            # Conservative estimate: h-index is bounded by number of papers
+            # For new papers without citations, assume h = num_papers
+            # (This would be refined with actual citation data)
+            h = num_papers
             h_index[author] = h
 
         stats = {

@@ -119,8 +119,8 @@ class ArXivScraper:
                 paper_dict = self._result_to_dict(result)
                 papers.append(paper_dict)
 
-                # Rate limiting
-                time.sleep(self.config.ARXIV_API_DELAY / 1000.0)  # Convert to seconds
+                # Rate limiting (config value is already in seconds)
+                time.sleep(self.config.ARXIV_API_DELAY)
 
         except Exception as e:
             logger.error(f"Error searching ArXiv: {e}")
