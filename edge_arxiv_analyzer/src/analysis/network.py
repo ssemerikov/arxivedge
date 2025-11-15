@@ -191,12 +191,29 @@ class NetworkAnalyzer:
                 "top_categories": category_counts.most_common(5),
             }
 
+        # Calculate modularity only if we have valid communities that cover all nodes
+        modularity = 0
+        if significant_communities:
+            try:
+                # Create partition list covering all nodes
+                all_nodes = set(G.nodes())
+                partition_nodes = set()
+                for members in significant_communities.values():
+                    partition_nodes.update(members)
+
+                # Only calculate if all nodes are in partition
+                if partition_nodes == all_nodes:
+                    modularity = nx.algorithms.community.modularity(
+                        G, [set(members) for members in significant_communities.values()]
+                    )
+            except Exception as e:
+                logger.warning(f"Could not calculate modularity: {e}")
+                modularity = 0
+
         stats = {
             "n_communities": len(significant_communities),
             "communities": community_info,
-            "modularity": nx.algorithms.community.modularity(
-                G, [set(members) for members in significant_communities.values()]
-            ) if significant_communities else 0,
+            "modularity": modularity,
         }
 
         logger.info(f"Identified {len(significant_communities)} significant communities")
