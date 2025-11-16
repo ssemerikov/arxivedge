@@ -88,15 +88,33 @@ class TikZGenerator:
 
         # Prepare data
         months = sorted(papers_by_month.keys())
-        counts = [papers_by_month[m] for m in months]
+        counts = []
+        for m in months:
+            val = papers_by_month[m]
+            # Ensure count is numeric
+            if isinstance(val, (list, dict)):
+                counts.append(len(val))
+            elif isinstance(val, (int, float)):
+                counts.append(int(val))
+            else:
+                logger.warning(f"Unexpected count type for month {m}: {type(val)}")
+                counts.append(0)
 
         # Generate coordinates
         coordinates = "\n            ".join([
             f"({i}, {count})" for i, count in enumerate(counts)
         ])
 
-        # Generate x-tick labels
-        month_labels = [datetime.strptime(m, "%Y-%m").strftime("%b") for m in months]
+        # Generate x-tick labels with error handling
+        month_labels = []
+        for m in months:
+            try:
+                label = datetime.strptime(m, "%Y-%m").strftime("%b")
+                month_labels.append(label)
+            except (ValueError, AttributeError) as e:
+                logger.warning(f"Invalid month format '{m}': {e}")
+                month_labels.append(str(m))  # Use raw string as fallback
+
         xtick_labels = ", ".join([f"{label}" for label in month_labels])
 
         tikz_code = r"""\begin{tikzpicture}
@@ -346,6 +364,10 @@ class TikZGenerator:
         types_data = [(rtype, count, count/total*100)
                       for rtype, count in type_counts.items()]
         types_data.sort(key=lambda x: x[1], reverse=True)
+
+        if not types_data:
+            logger.warning("No research type data after processing")
+            return ""
 
         # Colors for different slices
         colors = ['edgeblue', 'edgeorange', 'edgegreen', 'edgered',
@@ -613,6 +635,12 @@ class TikZGenerator:
 
             # Scale node size by betweenness centrality
             betweenness = author_data.get("betweenness", 0)
+            # Ensure betweenness is numeric
+            try:
+                betweenness = float(betweenness)
+            except (ValueError, TypeError):
+                logger.warning(f"Invalid betweenness value for {author}: {betweenness}")
+                betweenness = 0
             node_size = 0.3 + betweenness * 2  # Scale appropriately
 
             nodes.append(f"""        \\node[circle, fill=edgeblue, draw=edgeblue!80!black,
@@ -701,8 +729,16 @@ class TikZGenerator:
         ] coordinates {{{coordinates}}};
         \\addlegendentry{{{escaped_cat}}}""")
 
-        # Generate month labels
-        month_labels = [datetime.strptime(m, "%Y-%m").strftime("%b") for m in months]
+        # Generate month labels with error handling
+        month_labels = []
+        for m in months:
+            try:
+                label = datetime.strptime(m, "%Y-%m").strftime("%b")
+                month_labels.append(label)
+            except (ValueError, AttributeError) as e:
+                logger.warning(f"Invalid month format '{m}': {e}")
+                month_labels.append(str(m))  # Use raw string as fallback
+
         xtick_labels = ", ".join(month_labels)
 
         tikz_code = r"""\begin{tikzpicture}
