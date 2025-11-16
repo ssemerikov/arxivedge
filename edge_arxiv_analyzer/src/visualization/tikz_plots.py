@@ -155,8 +155,21 @@ class TikZGenerator:
             logger.warning("No category data available")
             return ""
 
+        # Convert to counts if values are lists
+        category_counts = {}
+        for cat, value in category_dist.items():
+            if isinstance(value, list):
+                category_counts[cat] = len(value)
+            else:
+                category_counts[cat] = value
+
         # Sort by count and take top 10
-        sorted_categories = sorted(category_dist.items(), key=lambda x: x[1], reverse=True)[:10]
+        sorted_categories = sorted(category_counts.items(), key=lambda x: x[1], reverse=True)[:10]
+
+        if not sorted_categories:
+            logger.warning("No categories to display after filtering")
+            return ""
+
         categories, counts = zip(*sorted_categories)
 
         # Escape LaTeX special characters in category names
@@ -224,8 +237,21 @@ class TikZGenerator:
             logger.warning("No author productivity data available")
             return ""
 
+        # Convert to counts if values are lists
+        author_counts = {}
+        for author, value in paper_counts.items():
+            if isinstance(value, list):
+                author_counts[author] = len(value)
+            else:
+                author_counts[author] = value
+
         # Sort and take top 15
-        sorted_authors = sorted(paper_counts.items(), key=lambda x: x[1], reverse=True)[:15]
+        sorted_authors = sorted(author_counts.items(), key=lambda x: x[1], reverse=True)[:15]
+
+        if not sorted_authors:
+            logger.warning("No authors to display after filtering")
+            return ""
+
         authors, counts = zip(*sorted_authors)
 
         # Escape author names
@@ -293,10 +319,23 @@ class TikZGenerator:
             logger.warning("No research type data available")
             return ""
 
+        # Convert to counts if values are lists
+        type_counts = {}
+        for rtype, value in research_types.items():
+            if isinstance(value, list):
+                type_counts[rtype] = len(value)
+            else:
+                type_counts[rtype] = value
+
         # Calculate percentages
-        total = sum(research_types.values())
+        total = sum(type_counts.values())
+
+        if total == 0:
+            logger.warning("No research type data to display (total = 0)")
+            return ""
+
         types_data = [(rtype, count, count/total*100)
-                      for rtype, count in research_types.items()]
+                      for rtype, count in type_counts.items()]
         types_data.sort(key=lambda x: x[1], reverse=True)
 
         # Colors for different slices
@@ -367,6 +406,10 @@ class TikZGenerator:
         # Sort by number of authors
         sorted_counts = sorted(author_counts.items())
         num_authors, frequencies = zip(*sorted_counts) if sorted_counts else ([], [])
+
+        if not num_authors:
+            logger.warning("No collaboration data to display after processing")
+            return ""
 
         # Generate coordinates
         coordinates = "\n            ".join([
@@ -449,6 +492,11 @@ class TikZGenerator:
                     for word_idx, norm_weight in enumerate(normalized)
                 ])
 
+        # Check if we have data to display
+        if not matrix_data or not x_labels:
+            logger.warning("No topic data available for heatmap")
+            return ""
+
         # Generate coordinates
         coordinates = "\n".join(matrix_data)
 
@@ -514,7 +562,7 @@ class TikZGenerator:
         coauthor_metrics = network_analysis.get("coauthorship_metrics", {})
         top_authors = coauthor_metrics.get("top_betweenness_authors", [])[:15]
 
-        if not top_authors:
+        if not top_authors or len(top_authors) == 0:
             logger.warning("No network data available")
             return ""
 
@@ -523,6 +571,11 @@ class TikZGenerator:
         # Here we'll create a simplified circular layout
 
         num_nodes = len(top_authors)
+
+        if num_nodes < 2:
+            logger.warning("Not enough nodes for network visualization (need at least 2)")
+            return ""
+
         radius = 3.5
 
         nodes = []
@@ -596,6 +649,10 @@ class TikZGenerator:
         for _, monthly_data in top_categories:
             all_months.update(monthly_data.keys())
         months = sorted(all_months)
+
+        if not months:
+            logger.warning("No monthly data available for category trends")
+            return ""
 
         # Colors for different categories
         colors = ['edgeblue', 'edgeorange', 'edgegreen', 'edgered', 'edgepurple']
