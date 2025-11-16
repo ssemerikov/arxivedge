@@ -1,0 +1,35 @@
+\begin{tikzpicture}
+    \begin{axis}[
+        width=0.95\textwidth,
+        height=7cm,
+        xlabel={Month (2025)},
+        ylabel={Number of Papers},
+        grid=major,
+        grid style={dashed, gray!30},
+        legend pos=north west,
+        xtick={0, 1, 2, 3, 4, 5},
+        xticklabels={чер, лип, сер, вер, жов, лис},
+        xticklabel style={rotate=45, anchor=east},
+        ymin=0,
+        ymajorgrids=true,
+        xmajorgrids=false,
+    ]
+
+        %% Main trend line
+        \addplot[
+            color=edgeblue,
+            mark=*,
+            mark size=3pt,
+            line width=1.5pt,
+        ] coordinates {
+            (0, 189)
+            (1, 434)
+            (2, 361)
+            (3, 410)
+            (4, 415)
+            (5, 191)
+        };
+        \addlegendentry{Publications per Month}
+
+    \end{axis}
+\end{tikzpicture}
