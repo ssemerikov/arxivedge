@@ -47,7 +47,7 @@ class LaTeXWriter:
         """Generate LaTeX preamble."""
         preamble = r"""\documentclass[12pt,a4paper]{article}
 
-% Packages
+% Core Packages
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath,amssymb}
@@ -62,6 +62,39 @@ class LaTeXWriter:
 \usepackage{multirow}
 \usepackage{longtable}
 \usepackage{array}
+
+% TikZ and PGFPlots for LaTeX-native graphics
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat=1.18}
+
+% TikZ libraries
+\usetikzlibrary{
+    arrows.meta,
+    positioning,
+    shapes.geometric,
+    calc,
+    backgrounds,
+    fit,
+    decorations.pathreplacing,
+    patterns,
+    shadows,
+    mindmap,
+    trees
+}
+
+% Custom colors for visualizations
+\definecolor{edgeblue}{RGB}{31,119,180}
+\definecolor{edgeorange}{RGB}{255,127,14}
+\definecolor{edgegreen}{RGB}{44,160,44}
+\definecolor{edgered}{RGB}{214,39,40}
+\definecolor{edgepurple}{RGB}{148,103,189}
+\definecolor{edgebrown}{RGB}{140,86,75}
+\definecolor{edgepink}{RGB}{227,119,194}
+\definecolor{edgegray}{RGB}{127,127,127}
+\definecolor{edgelightblue}{RGB}{174,199,232}
+\definecolor{edgelightgreen}{RGB}{152,223,138}
 
 % Page geometry
 \geometry{
@@ -84,6 +117,20 @@ class LaTeXWriter:
 % Caption setup
 \captionsetup{font=small,labelfont=bf}
 
+% PGFPlots settings
+\pgfplotsset{
+    every axis/.append style={
+        thick,
+        tick style={thick},
+        font=\small,
+        label style={font=\small},
+        legend style={font=\footnotesize},
+    },
+    every axis plot/.append style={
+        line width=1.5pt,
+    },
+}
+
 % Title information
 \title{\textbf{Edge of ArXiv: Cutting-Edge Computing Research Trends in 2025}\\
 \large A Comprehensive Bibliometric and Thematic Analysis}
@@ -105,13 +152,13 @@ ArXiv Analysis System\\
         total_papers = summary.get("total_papers", 0)
         total_authors = summary.get("total_authors", 0)
 
-        abstract = rf"""
-\begin{abstract}
+        # Use format() instead of f-string to avoid potential variable scoping issues
+        abstract_text = r"""\begin{abstract}
 Edge computing has emerged as a critical paradigm for addressing the computational
 and latency requirements of modern distributed applications. This review presents a
 comprehensive bibliometric and thematic analysis of edge computing research published
-on ArXiv in 2025. We analyzed \textbf{{{total_papers}}} papers authored by
-\textbf{{{total_authors}}} researchers, examining publication trends, collaboration
+on ArXiv in 2025. We analyzed \textbf{%d} papers authored by
+\textbf{%d} researchers, examining publication trends, collaboration
 patterns, research themes, and emerging topics. Our analysis employs advanced
 bibliometric methods, natural language processing, and network analysis to identify
 key research directions, prolific authors, and technological trends. The findings
@@ -120,10 +167,11 @@ security-focused research. This study provides valuable insights for researchers
 practitioners, and policymakers navigating the rapidly evolving edge computing landscape.
 \end{abstract}
 
-\textbf{{Keywords:}} Edge Computing, Bibliometric Analysis, ArXiv, Research Trends,
+\textbf{Keywords:} Edge Computing, Bibliometric Analysis, ArXiv, Research Trends,
 Topic Modeling, Thematic Analysis, 2025
-"""
-        return abstract
+""" % (total_papers, total_authors)
+
+        return abstract_text
 
     def generate_introduction(self, analysis_results: Dict[str, Any]) -> str:
         """Generate introduction section."""
@@ -297,7 +345,7 @@ papers across these leading researchers.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.9\textwidth]{../figures/author_productivity.pdf}
+    \input{../figures/author_productivity.tex}
     \caption{Top 15 Most Prolific Authors in Edge Computing (2025)}
     \label{fig:author_productivity}
 \end{figure}
@@ -312,7 +360,7 @@ show the distribution across categories.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.9\textwidth]{../figures/category_distribution.pdf}
+    \input{../figures/category_distribution.tex}
     \caption{Distribution of Papers Across ArXiv Categories}
     \label{fig:category_distribution}
 \end{figure}
@@ -327,7 +375,7 @@ present the distribution.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.85\textwidth]{../figures/research_type_distribution.pdf}
+    \input{../figures/research_type_distribution.tex}
     \caption{Distribution of Research Types in Edge Computing (2025)}
     \label{fig:research_type_distribution}
 \end{figure}
@@ -342,6 +390,7 @@ visual representation.
 
 \begin{figure}[htbp]
     \centering
+    % Note: Word cloud kept as PDF for better visual quality
     \includegraphics[width=0.95\textwidth]{../figures/keyword_cloud.pdf}
     \caption{Word Cloud of Most Frequent Keywords}
     \label{fig:keyword_cloud}
@@ -354,7 +403,7 @@ the distribution of single vs. multi-author papers and authors-per-paper statist
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.95\textwidth]{../figures/collaboration_statistics.pdf}
+    \input{../figures/collaboration_statistics.tex}
     \caption{Collaboration Statistics in Edge Computing Research}
     \label{fig:collaboration_statistics}
 \end{figure}
@@ -385,7 +434,7 @@ revealing relationships between topics and their defining terms.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.95\textwidth]{../figures/topic_heatmap.pdf}
+    \input{../figures/topic_heatmap.tex}
     \caption{Topic-Keyword Association Heatmap (LDA Analysis)}
     \label{fig:topic_heatmap}
 \end{figure}
@@ -421,7 +470,7 @@ throughout 2025, including trend analysis and forecasting.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.95\textwidth]{../figures/temporal_trends.pdf}
+    \input{../figures/temporal_trends.tex}
     \caption{Temporal Trends in Edge Computing Publications (2025)}
     \label{fig:temporal_trends}
 \end{figure}
@@ -433,7 +482,7 @@ over time, revealing shifting research priorities.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.95\textwidth]{../figures/monthly_category_trends.pdf}
+    \input{../figures/monthly_category_trends.tex}
     \caption{Monthly Publication Trends by Top Categories}
     \label{fig:monthly_category_trends}
 \end{figure}
@@ -452,7 +501,7 @@ highlighting key researchers and collaboration clusters.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.95\textwidth]{../figures/collaboration_network.pdf}
+    \input{../figures/collaboration_network.tex}
     \caption{Co-authorship Network (Top Authors by Betweenness Centrality)}
     \label{fig:collaboration_network}
 \end{figure}
