@@ -153,7 +153,10 @@ class Config:
         """Convert configuration to dictionary."""
         return {
             key: value for key, value in cls.__dict__.items()
-            if not key.startswith("_") and not callable(value)
+            if not key.startswith("_")
+            and not callable(value)
+            and not isinstance(value, classmethod)
+            and not isinstance(value, staticmethod)
         }
 
     @classmethod
