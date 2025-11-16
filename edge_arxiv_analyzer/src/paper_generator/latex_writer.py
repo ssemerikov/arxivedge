@@ -345,7 +345,7 @@ papers across these leading researchers.
 
 \begin{figure}[htbp]
     \centering
-    \input{../figures/author_productivity.tex}
+    \includegraphics[width=0.8\textwidth]{../figures/author_productivity.pdf}
     \caption{Top 15 Most Prolific Authors in Edge Computing (2025)}
     \label{fig:author_productivity}
 \end{figure}
@@ -403,7 +403,7 @@ the distribution of single vs. multi-author papers and authors-per-paper statist
 
 \begin{figure}[htbp]
     \centering
-    \input{../figures/collaboration_statistics.tex}
+    \includegraphics[width=0.8\textwidth]{../figures/collaboration_statistics.pdf}
     \caption{Collaboration Statistics in Edge Computing Research}
     \label{fig:collaboration_statistics}
 \end{figure}
@@ -434,7 +434,7 @@ revealing relationships between topics and their defining terms.
 
 \begin{figure}[htbp]
     \centering
-    \input{../figures/topic_heatmap.tex}
+    \includegraphics[width=0.95\textwidth]{../figures/topic_heatmap.pdf}
     \caption{Topic-Keyword Association Heatmap (LDA Analysis)}
     \label{fig:topic_heatmap}
 \end{figure}
@@ -501,7 +501,7 @@ highlighting key researchers and collaboration clusters.
 
 \begin{figure}[htbp]
     \centering
-    \input{../figures/collaboration_network.tex}
+    \includegraphics[width=0.95\textwidth]{../figures/collaboration_network.pdf}
     \caption{Co-authorship Network (Top Authors by Betweenness Centrality)}
     \label{fig:collaboration_network}
 \end{figure}
