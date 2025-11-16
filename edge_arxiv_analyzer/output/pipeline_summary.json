@@ -1,0 +1,23 @@
+{
+  "pipeline_run": "2025-11-16T11:59:46.913997",
+  "total_papers": 2000,
+  "analysis_results": {
+    "bibliometric": {
+      "total_authors": 8683,
+      "total_categories": 124
+    },
+    "thematic": {
+      "n_topics": 10
+    },
+    "network": {
+      "n_authors": 8683
+    }
+  },
+  "output_files": {
+    "data": 5,
+    "figures": 22,
+    "tables": 6,
+    "bibtex": 2,
+    "paper": 4
+  }
+}
