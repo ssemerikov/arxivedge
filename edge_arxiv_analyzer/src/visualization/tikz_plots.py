@@ -88,15 +88,33 @@ class TikZGenerator:
 
         # Prepare data
         months = sorted(papers_by_month.keys())
-        counts = [papers_by_month[m] for m in months]
+        counts = []
+        for m in months:
+            val = papers_by_month[m]
+            # Ensure count is numeric
+            if isinstance(val, (list, dict)):
+                counts.append(len(val))
+            elif isinstance(val, (int, float)):
+                counts.append(int(val))
+            else:
+                logger.warning(f"Unexpected count type for month {m}: {type(val)}")
+                counts.append(0)
 
         # Generate coordinates
         coordinates = "\n            ".join([
             f"({i}, {count})" for i, count in enumerate(counts)
         ])
 
-        # Generate x-tick labels
-        month_labels = [datetime.strptime(m, "%Y-%m").strftime("%b") for m in months]
+        # Generate x-tick labels with error handling
+        month_labels = []
+        for m in months:
+            try:
+                label = datetime.strptime(m, "%Y-%m").strftime("%b")
+                month_labels.append(label)
+            except (ValueError, AttributeError) as e:
+                logger.warning(f"Invalid month format '{m}': {e}")
+                month_labels.append(str(m))  # Use raw string as fallback
+
         xtick_labels = ", ".join([f"{label}" for label in month_labels])
 
         tikz_code = r"""\begin{tikzpicture}
@@ -347,6 +365,10 @@ class TikZGenerator:
                       for rtype, count in type_counts.items()]
         types_data.sort(key=lambda x: x[1], reverse=True)
 
+        if not types_data:
+            logger.warning("No research type data after processing")
+            return ""
+
         # Colors for different slices
         colors = ['edgeblue', 'edgeorange', 'edgegreen', 'edgered',
                   'edgepurple', 'edgebrown', 'edgepink', 'edgegray']
@@ -473,8 +495,18 @@ class TikZGenerator:
             logger.warning("No LDA topic data available")
             return ""
 
+        # Handle both list and dict formats for lda_topics
+        if isinstance(lda_topics, dict):
+            # Convert dict to list of topics
+            topics_list = list(lda_topics.values())
+        elif isinstance(lda_topics, list):
+            topics_list = lda_topics
+        else:
+            logger.warning(f"Unexpected lda_topics type: {type(lda_topics)}")
+            return ""
+
         # Take first 5 topics and top 8 words per topic
-        topics_to_show = min(5, len(lda_topics))
+        topics_to_show = min(5, len(topics_list))
         words_per_topic = 8
 
         # Build matrix data
@@ -483,9 +515,15 @@ class TikZGenerator:
         x_labels = []
 
         for topic_idx in range(topics_to_show):
-            topic = lda_topics[topic_idx]
-            words = topic.get("words", [])[:words_per_topic]
-            weights = topic.get("weights", [])[:words_per_topic]
+            topic = topics_list[topic_idx]
+
+            # Handle topic being a dict or having get method
+            if isinstance(topic, dict):
+                words = topic.get("words", [])[:words_per_topic]
+                weights = topic.get("weights", [])[:words_per_topic]
+            else:
+                logger.warning(f"Unexpected topic format at index {topic_idx}: {type(topic)}")
+                continue
 
             y_labels.append(f"Topic {topic_idx + 1}")
 
@@ -597,6 +635,12 @@ class TikZGenerator:
 
             # Scale node size by betweenness centrality
             betweenness = author_data.get("betweenness", 0)
+            # Ensure betweenness is numeric
+            try:
+                betweenness = float(betweenness)
+            except (ValueError, TypeError):
+                logger.warning(f"Invalid betweenness value for {author}: {betweenness}")
+                betweenness = 0
             node_size = 0.3 + betweenness * 2  # Scale appropriately
 
             nodes.append(f"""        \\node[circle, fill=edgeblue, draw=edgeblue!80!black,
@@ -685,8 +729,16 @@ class TikZGenerator:
         ] coordinates {{{coordinates}}};
         \\addlegendentry{{{escaped_cat}}}""")
 
-        # Generate month labels
-        month_labels = [datetime.strptime(m, "%Y-%m").strftime("%b") for m in months]
+        # Generate month labels with error handling
+        month_labels = []
+        for m in months:
+            try:
+                label = datetime.strptime(m, "%Y-%m").strftime("%b")
+                month_labels.append(label)
+            except (ValueError, AttributeError) as e:
+                logger.warning(f"Invalid month format '{m}': {e}")
+                month_labels.append(str(m))  # Use raw string as fallback
+
         xtick_labels = ", ".join(month_labels)
 
         tikz_code = r"""\begin{tikzpicture}
