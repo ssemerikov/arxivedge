@@ -1,5 +1,5 @@
 {
-  "pipeline_run": "2025-11-16T11:59:46.913997",
+  "pipeline_run": "2025-11-16T12:50:49.086329",
   "total_papers": 2000,
   "analysis_results": {
     "bibliometric": {
@@ -15,9 +15,9 @@
   },
   "output_files": {
     "data": 5,
-    "figures": 22,
+    "figures": 27,
     "tables": 6,
     "bibtex": 2,
-    "paper": 4
+    "paper": 6
   }
 }

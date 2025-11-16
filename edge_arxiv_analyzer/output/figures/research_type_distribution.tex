@@ -1,23 +1,23 @@
 \begin{tikzpicture}
     \begin{scope}
         % research\_type\_counts
-        \fill[edgeblue] (0,0) -- (0:2) arc (0:180.0:2) -- cycle;
-        \draw[black, thick] (0,0) -- (0:2) arc (0:180.0:2) -- cycle;
-        \node at (90.0:2.7) {\small 50.0\%};
+        \fill[edgeblue] (0,0) -- (0:2) arc (0:160.0:2) -- cycle;
+        \draw[black, thick] (0,0) -- (0:2) arc (0:160.0:2) -- cycle;
+        \node at (80.0:2.7) {\small 44.4\%};
         % research\_type\_percentages
-        \fill[edgeorange] (0,0) -- (180.0:2) arc (180.0:360.0:2) -- cycle;
-        \draw[black, thick] (0,0) -- (180.0:2) arc (180.0:360.0:2) -- cycle;
-        \node at (270.0:2.7) {\small 50.0\%};
+        \fill[edgeorange] (0,0) -- (160.0:2) arc (160.0:320.0:2) -- cycle;
+        \draw[black, thick] (0,0) -- (160.0:2) arc (160.0:320.0:2) -- cycle;
+        \node at (240.0:2.7) {\small 44.4\%};
         % most\_common\_type
-        \fill[edgegreen] (0,0) -- (360.0:2) arc (360.0:360.0:2) -- cycle;
-        \draw[black, thick] (0,0) -- (360.0:2) arc (360.0:360.0:2) -- cycle;
-        \node at (360.0:2.7) {\small 0.0\%};
+        \fill[edgegreen] (0,0) -- (320.0:2) arc (320.0:360.0:2) -- cycle;
+        \draw[black, thick] (0,0) -- (320.0:2) arc (320.0:360.0:2) -- cycle;
+        \node at (340.0:2.7) {\small 11.1\%};
     \end{scope}
 
     %% Legend
     \begin{scope}[shift={(0, -1)}]
         \node[fill=edgeblue, minimum width=0.3cm, minimum height=0.3cm] at (0.0, -3.5) {}; \node[anchor=west] at (0.2, -3.5) {\footnotesize research\_type\_counts (8)};
         \node[fill=edgeorange, minimum width=0.3cm, minimum height=0.3cm] at (0.8, -3.5) {}; \node[anchor=west] at (1.0, -3.5) {\footnotesize research\_type\_percentages (8)};
-        \node[fill=edgegreen, minimum width=0.3cm, minimum height=0.3cm] at (1.6, -3.5) {}; \node[anchor=west] at (1.8, -3.5) {\footnotesize most\_common\_type (0)};
+        \node[fill=edgegreen, minimum width=0.3cm, minimum height=0.3cm] at (1.6, -3.5) {}; \node[anchor=west] at (1.8, -3.5) {\footnotesize most\_common\_type (2)};
     \end{scope}
 \end{tikzpicture}

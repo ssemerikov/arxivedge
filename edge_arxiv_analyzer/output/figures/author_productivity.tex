@@ -1,0 +1,37 @@
+\begin{tikzpicture}
+    \begin{axis}[
+        xbar,
+        width=0.9\textwidth,
+        height=10cm,
+        xlabel={Number of Papers},
+        ylabel={Author},
+        ytick={0, 1, 2, 3, 4, 5, 6, 7, 8, 9},
+        yticklabels={Dusit Niyato, Wei Ni, Ruichen Zhang, Dong In Kim, Zehui Xiong, Yogesh Simmhan, Chen Chen, Zhu Han, Jiacheng Wang, Xin Wang},
+        yticklabel style={font=\small},
+        xmin=0,
+        grid=major,
+        grid style={dashed, gray!30},
+        bar width=0.5cm,
+        nodes near coords,
+        nodes near coords align={horizontal},
+        every node near coord/.append style={font=\footnotesize},
+    ]
+
+        \addplot[
+            fill=edgeorange,
+            draw=edgeorange!80!black,
+        ] coordinates {
+            (25, 0)
+            (11, 1)
+            (10, 2)
+            (10, 3)
+            (8, 4)
+            (8, 5)
+            (7, 6)
+            (7, 7)
+            (7, 8)
+            (6, 9)
+        };
+
+    \end{axis}
+\end{tikzpicture}

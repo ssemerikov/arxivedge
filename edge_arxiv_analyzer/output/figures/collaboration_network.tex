@@ -1,0 +1,48 @@
+\begin{tikzpicture}[scale=0.9]
+    %% Nodes
+        \node[circle, fill=edgeblue, draw=edgeblue!80!black,
+              minimum size=1.0cm, font=\tiny, text=white]
+              (n0) at (0.0:3.5) {332};
+        \node[font=\scriptsize, text width=2.5cm, align=center] at (0.0:4.7) {cs.LG};
+        \node[circle, fill=edgeblue, draw=edgeblue!80!black,
+              minimum size=0.5710843373493977cm, font=\tiny, text=white]
+              (n1) at (45.0:3.5) {154};
+        \node[font=\scriptsize, text width=2.5cm, align=center] at (45.0:4.7) {cs.AI};
+        \node[circle, fill=edgeblue, draw=edgeblue!80!black,
+              minimum size=0.5228915662650603cm, font=\tiny, text=white]
+              (n2) at (90.0:3.5) {134};
+        \node[font=\scriptsize, text width=2.5cm, align=center] at (90.0:4.7) {cs.LG};
+        \node[circle, fill=edgeblue, draw=edgeblue!80!black,
+              minimum size=0.4963855421686747cm, font=\tiny, text=white]
+              (n3) at (135.0:3.5) {123};
+        \node[font=\scriptsize, text width=2.5cm, align=center] at (135.0:4.7) {cs.CV};
+        \node[circle, fill=edgeblue, draw=edgeblue!80!black,
+              minimum size=0.4843373493975904cm, font=\tiny, text=white]
+              (n4) at (180.0:3.5) {118};
+        \node[font=\scriptsize, text width=2.5cm, align=center] at (180.0:4.7) {cs.AI};
+        \node[circle, fill=edgeblue, draw=edgeblue!80!black,
+              minimum size=0.4602409638554217cm, font=\tiny, text=white]
+              (n5) at (225.0:3.5) {108};
+        \node[font=\scriptsize, text width=2.5cm, align=center] at (225.0:4.7) {cs.AI};
+        \node[circle, fill=edgeblue, draw=edgeblue!80!black,
+              minimum size=0.43855421686746987cm, font=\tiny, text=white]
+              (n6) at (270.0:3.5) {99};
+        \node[font=\scriptsize, text width=2.5cm, align=center] at (270.0:4.7) {cs.AI};
+        \node[circle, fill=edgeblue, draw=edgeblue!80!black,
+              minimum size=0.4337349397590362cm, font=\tiny, text=white]
+              (n7) at (315.0:3.5) {97};
+        \node[font=\scriptsize, text width=2.5cm, align=center] at (315.0:4.7) {cs.AI};
+
+    %% Edges
+        \draw[gray, opacity=0.3] (n0) -- (n1);
+        \draw[gray, opacity=0.3] (n1) -- (n2);
+        \draw[gray, opacity=0.3] (n2) -- (n3);
+        \draw[gray, opacity=0.3] (n3) -- (n4);
+        \draw[gray, opacity=0.3] (n4) -- (n5);
+        \draw[gray, opacity=0.3] (n5) -- (n6);
+        \draw[gray, opacity=0.3] (n6) -- (n7);
+        \draw[gray, opacity=0.3] (n7) -- (n0);
+
+    %% Title annotation
+    \node[font=\small, anchor=north] at (0, -5) {Top Research Communities by Size};
+\end{tikzpicture}

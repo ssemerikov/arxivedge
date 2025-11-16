@@ -17,7 +17,7 @@ class TableGenerator:
 
     def _escape_latex(self, text: str) -> str:
         """
-        Escape special LaTeX characters.
+        Escape special LaTeX characters and remove/transliterate non-ASCII.
 
         Args:
             text: Input text
@@ -28,6 +28,19 @@ class TableGenerator:
         if not isinstance(text, str):
             text = str(text)
 
+        # First, handle non-ASCII characters by converting to ASCII
+        # This removes accents and transliterates when possible
+        import unicodedata
+        try:
+            # Normalize to NFD (decomposed form) and remove combining characters
+            text = unicodedata.normalize('NFD', text)
+            # Keep only ASCII characters
+            text = text.encode('ascii', 'ignore').decode('ascii')
+        except Exception:
+            # Fallback: remove all non-ASCII
+            text = ''.join(c for c in text if ord(c) < 128)
+
+        # Then escape special LaTeX characters
         replacements = {
             '&': r'\&',
             '%': r'\%',
