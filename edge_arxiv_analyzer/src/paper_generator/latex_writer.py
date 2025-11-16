@@ -345,7 +345,7 @@ papers across these leading researchers.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.8\textwidth]{../figures/author_productivity.pdf}
+    \input{../figures/author_productivity.tex}
     \caption{Top 15 Most Prolific Authors in Edge Computing (2025)}
     \label{fig:author_productivity}
 \end{figure}
@@ -390,8 +390,7 @@ visual representation.
 
 \begin{figure}[htbp]
     \centering
-    % Note: Word cloud kept as PDF for better visual quality
-    \includegraphics[width=0.95\textwidth]{../figures/keyword_cloud.pdf}
+    \input{../figures/keyword_cloud.tex}
     \caption{Word Cloud of Most Frequent Keywords}
     \label{fig:keyword_cloud}
 \end{figure}
@@ -403,7 +402,7 @@ the distribution of single vs. multi-author papers and authors-per-paper statist
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.8\textwidth]{../figures/collaboration_statistics.pdf}
+    \input{../figures/collaboration_statistics.tex}
     \caption{Collaboration Statistics in Edge Computing Research}
     \label{fig:collaboration_statistics}
 \end{figure}
@@ -434,7 +433,7 @@ revealing relationships between topics and their defining terms.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.95\textwidth]{../figures/topic_heatmap.pdf}
+    \input{../figures/topic_heatmap.tex}
     \caption{Topic-Keyword Association Heatmap (LDA Analysis)}
     \label{fig:topic_heatmap}
 \end{figure}
@@ -501,7 +500,7 @@ highlighting key researchers and collaboration clusters.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.95\textwidth]{../figures/collaboration_network.pdf}
+    \input{../figures/collaboration_network.tex}
     \caption{Co-authorship Network (Top Authors by Betweenness Centrality)}
     \label{fig:collaboration_network}
 \end{figure}
