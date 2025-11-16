@@ -116,7 +116,7 @@ class TikZGenerator:
         xmajorgrids=false,
     ]
 
-        % Main trend line
+        %%%% Main trend line
         \addplot[
             color=edgeblue,
             mark=*,
@@ -329,7 +329,7 @@ class TikZGenerator:
 %s
     \end{scope}
 
-    % Legend
+    %%%% Legend
     \begin{scope}[shift={(0, -1)}]
 %s
     \end{scope}
@@ -549,13 +549,13 @@ class TikZGenerator:
             edges.append(f"        \\draw[gray, opacity=0.3] (n{i}) -- (n{next_i});")
 
         tikz_code = r"""\begin{tikzpicture}[scale=0.8]
-    % Nodes
+    %%%% Nodes
 %s
 
-    % Edges
+    %%%% Edges
 %s
 
-    % Title annotation
+    %%%% Title annotation
     \node[font=\small, anchor=north] at (0, -5) {Top 15 Authors by Betweenness Centrality};
 \end{tikzpicture}""" % (
             "\n".join(nodes),
