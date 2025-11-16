@@ -683,7 +683,10 @@ class TikZGenerator:
         """
         logger.info("Generating TikZ monthly category trends")
 
-        category_trends = temporal_analysis.get("category_trends", {})
+        # The analyze_category_trends() returns a dict with "category_trends" and "top_categories" keys
+        # We need to access the nested "category_trends" dict
+        category_trends_data = temporal_analysis.get("category_trends", {})
+        category_trends = category_trends_data.get("category_trends", {})
 
         if not category_trends:
             logger.warning("No category trend data available")
