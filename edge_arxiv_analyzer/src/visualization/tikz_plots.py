@@ -473,8 +473,18 @@ class TikZGenerator:
             logger.warning("No LDA topic data available")
             return ""
 
+        # Handle both list and dict formats for lda_topics
+        if isinstance(lda_topics, dict):
+            # Convert dict to list of topics
+            topics_list = list(lda_topics.values())
+        elif isinstance(lda_topics, list):
+            topics_list = lda_topics
+        else:
+            logger.warning(f"Unexpected lda_topics type: {type(lda_topics)}")
+            return ""
+
         # Take first 5 topics and top 8 words per topic
-        topics_to_show = min(5, len(lda_topics))
+        topics_to_show = min(5, len(topics_list))
         words_per_topic = 8
 
         # Build matrix data
@@ -483,9 +493,15 @@ class TikZGenerator:
         x_labels = []
 
         for topic_idx in range(topics_to_show):
-            topic = lda_topics[topic_idx]
-            words = topic.get("words", [])[:words_per_topic]
-            weights = topic.get("weights", [])[:words_per_topic]
+            topic = topics_list[topic_idx]
+
+            # Handle topic being a dict or having get method
+            if isinstance(topic, dict):
+                words = topic.get("words", [])[:words_per_topic]
+                weights = topic.get("weights", [])[:words_per_topic]
+            else:
+                logger.warning(f"Unexpected topic format at index {topic_idx}: {type(topic)}")
+                continue
 
             y_labels.append(f"Topic {topic_idx + 1}")
 
