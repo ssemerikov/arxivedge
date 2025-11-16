@@ -671,6 +671,100 @@ class TikZGenerator:
         self._save_tikz(tikz_code, "collaboration_network")
         return tikz_code
 
+    def generate_keyword_cloud(self, bibliometric_analysis: Dict[str, Any]) -> str:
+        """
+        Generate TikZ code for keyword visualization (simplified word cloud).
+
+        Since true word clouds with complex layouts are impractical in TikZ,
+        this creates a styled keyword display with varying font sizes.
+
+        Args:
+            bibliometric_analysis: Bibliometric analysis results
+
+        Returns:
+            str: TikZ code
+        """
+        logger.info("Generating TikZ keyword cloud (simplified)")
+
+        keyword_analysis = bibliometric_analysis.get("keyword_analysis", {})
+        top_keywords = keyword_analysis.get("top_keywords", [])
+
+        if not top_keywords:
+            logger.warning("No keyword data available")
+            return ""
+
+        # Take top 30 keywords
+        keywords_to_show = top_keywords[:30]
+
+        if not keywords_to_show:
+            logger.warning("No keywords to display after filtering")
+            return ""
+
+        # Calculate font sizes based on frequency
+        # Get max frequency for normalization
+        max_freq = max([kw.get("count", 0) for kw in keywords_to_show])
+
+        # Create keyword nodes with varying sizes
+        nodes = []
+        x, y = 0, 0
+        max_per_row = 5
+
+        for i, kw_data in enumerate(keywords_to_show):
+            keyword = kw_data.get("keyword", "")
+            count = kw_data.get("count", 0)
+
+            # Escape LaTeX special characters
+            keyword_escaped = self._escape_latex(keyword)
+
+            # Calculate font size (scale from \small to \Huge)
+            normalized_freq = count / max_freq if max_freq > 0 else 0
+
+            if normalized_freq > 0.8:
+                font_size = "\\Huge"
+            elif normalized_freq > 0.6:
+                font_size = "\\huge"
+            elif normalized_freq > 0.4:
+                font_size = "\\LARGE"
+            elif normalized_freq > 0.2:
+                font_size = "\\Large"
+            else:
+                font_size = "\\large"
+
+            # Choose color based on frequency
+            if normalized_freq > 0.7:
+                color = "edgeblue"
+            elif normalized_freq > 0.4:
+                color = "edgeorange"
+            else:
+                color = "edgegreen"
+
+            # Position in grid
+            col = i % max_per_row
+            row = i // max_per_row
+            x_pos = col * 3.5
+            y_pos = -row * 1.2
+
+            nodes.append(f"""        \\node[text={color}, font={font_size}] at ({x_pos}, {y_pos}) {{{keyword_escaped}}};""")
+
+        tikz_code = r"""\begin{tikzpicture}[scale=0.9]
+    %%%% Title
+    \node[font=\Large\bfseries, anchor=north] at (7, 1) {Top Keywords in Edge Computing Research};
+
+    %%%% Keyword nodes
+%s
+
+    %%%% Legend
+    \node[font=\small, anchor=north west, align=left] at (0, -8) {
+        Font size indicates keyword frequency\\
+        Colors: \textcolor{edgeblue}{High frequency} |
+        \textcolor{edgeorange}{Medium frequency} |
+        \textcolor{edgegreen}{Lower frequency}
+    };
+\end{tikzpicture}""" % "\n".join(nodes)
+
+        self._save_tikz(tikz_code, "keyword_cloud")
+        return tikz_code
+
     def generate_monthly_category_trends(self, temporal_analysis: Dict[str, Any]) -> str:
         """
         Generate PGFPlots code for monthly category trends.
@@ -793,6 +887,7 @@ class TikZGenerator:
         self.generate_category_distribution(bibliometric)
         self.generate_author_productivity(bibliometric)
         self.generate_research_type_pie(bibliometric)
+        self.generate_keyword_cloud(bibliometric)
         self.generate_collaboration_histogram(bibliometric)
         self.generate_topic_heatmap(thematic)
         self.generate_network_graph(network)
