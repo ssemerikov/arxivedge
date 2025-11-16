@@ -155,13 +155,16 @@ class TikZGenerator:
             logger.warning("No category data available")
             return ""
 
-        # Convert to counts if values are lists
+        # Convert to counts regardless of value type (list, dict, or int)
         category_counts = {}
         for cat, value in category_dist.items():
-            if isinstance(value, list):
+            if isinstance(value, (list, dict)):
                 category_counts[cat] = len(value)
+            elif isinstance(value, (int, float)):
+                category_counts[cat] = int(value)
             else:
-                category_counts[cat] = value
+                logger.warning(f"Unexpected value type for category {cat}: {type(value)}")
+                category_counts[cat] = 0
 
         # Sort by count and take top 10
         sorted_categories = sorted(category_counts.items(), key=lambda x: x[1], reverse=True)[:10]
@@ -237,13 +240,16 @@ class TikZGenerator:
             logger.warning("No author productivity data available")
             return ""
 
-        # Convert to counts if values are lists
+        # Convert to counts regardless of value type (list, dict, or int)
         author_counts = {}
         for author, value in paper_counts.items():
-            if isinstance(value, list):
+            if isinstance(value, (list, dict)):
                 author_counts[author] = len(value)
+            elif isinstance(value, (int, float)):
+                author_counts[author] = int(value)
             else:
-                author_counts[author] = value
+                logger.warning(f"Unexpected value type for author {author}: {type(value)}")
+                author_counts[author] = 0
 
         # Sort and take top 15
         sorted_authors = sorted(author_counts.items(), key=lambda x: x[1], reverse=True)[:15]
@@ -319,13 +325,16 @@ class TikZGenerator:
             logger.warning("No research type data available")
             return ""
 
-        # Convert to counts if values are lists
+        # Convert to counts regardless of value type (list, dict, or int)
         type_counts = {}
         for rtype, value in research_types.items():
-            if isinstance(value, list):
+            if isinstance(value, (list, dict)):
                 type_counts[rtype] = len(value)
+            elif isinstance(value, (int, float)):
+                type_counts[rtype] = int(value)
             else:
-                type_counts[rtype] = value
+                logger.warning(f"Unexpected value type for research type {rtype}: {type(value)}")
+                type_counts[rtype] = 0
 
         # Calculate percentages
         total = sum(type_counts.values())
