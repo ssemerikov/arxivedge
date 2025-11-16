@@ -224,10 +224,16 @@ class ArXivEdgeAnalyzer:
         """Step 5: Generate visualizations."""
         logger.info("Step 5: Generating visualizations")
 
+        # Generate matplotlib figures (PDF/PNG)
         viz_generator = VisualizationGenerator(self.config)
         figures = viz_generator.create_all_figures(self.analysis_results)
+        logger.info(f"Generated {len(figures)} matplotlib figures")
 
-        logger.info(f"Generated {len(figures)} figures")
+        # Generate TikZ/LaTeX-native figures
+        from src.visualization.tikz_plots import TikZGenerator
+        tikz_generator = TikZGenerator(self.config)
+        tikz_generator.generate_all_figures(self.analysis_results)
+        logger.info("Generated TikZ/LaTeX-native figures")
 
     def generate_tables(self):
         """Step 6: Generate LaTeX tables."""
