@@ -691,7 +691,7 @@ class TikZGenerator:
 
         # Get top 5 categories
         top_categories = sorted(category_trends.items(),
-                               key=lambda x: sum(x[1].values()),
+                               key=lambda x: x[1].get("total_papers", 0),
                                reverse=True)[:5]
 
         if not top_categories:
@@ -699,8 +699,8 @@ class TikZGenerator:
 
         # Get all months
         all_months = set()
-        for _, monthly_data in top_categories:
-            all_months.update(monthly_data.keys())
+        for _, cat_data in top_categories:
+            all_months.update(cat_data.get("papers_by_month", {}).keys())
         months = sorted(all_months)
 
         if not months:
@@ -712,12 +712,15 @@ class TikZGenerator:
 
         # Generate plots for each category
         plots = []
-        for i, (category, monthly_data) in enumerate(top_categories):
+        for i, (category, cat_data) in enumerate(top_categories):
             escaped_cat = self._escape_latex(category)
             color = colors[i % len(colors)]
 
+            # Get the papers_by_month data
+            papers_by_month = cat_data.get("papers_by_month", {})
+
             coordinates = " ".join([
-                f"({month_idx}, {monthly_data.get(month, 0)})"
+                f"({month_idx}, {papers_by_month.get(month, 0)})"
                 for month_idx, month in enumerate(months)
             ])
 
