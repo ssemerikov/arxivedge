@@ -1,0 +1,33 @@
+\begin{tikzpicture}
+    \begin{axis}[
+        xbar,
+        width=0.9\textwidth,
+        height=8cm,
+        xlabel={Number of Papers},
+        ylabel={ArXiv Category},
+        ytick={0, 1, 2, 3, 4, 5, 6},
+        yticklabels={cross\_category\_papers, total\_categories, category\_distribution, primary\_category\_distribution, top\_10\_categories, top\_5\_categories, cross\_category\_ratio},
+        xmin=0,
+        grid=major,
+        grid style={dashed, gray!30},
+        bar width=0.6cm,
+        nodes near coords,
+        nodes near coords align={horizontal},
+        every node near coord/.append style={font=\footnotesize},
+    ]
+
+        \addplot[
+            fill=edgeblue,
+            draw=edgeblue!80!black,
+        ] coordinates {
+            (1080, 0)
+            (124, 1)
+            (124, 2)
+            (104, 3)
+            (10, 4)
+            (5, 5)
+            (0, 6)
+        };
+
+    \end{axis}
+\end{tikzpicture}
