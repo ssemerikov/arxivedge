@@ -200,13 +200,13 @@ snapshot of the field's current state and future directions.
 
 This study addresses the following research questions:
 
-\begin{enumerate}
+\begin{{enumerate}}
     \item What are the primary research themes and topics in edge computing research in 2025?
     \item Who are the most prolific authors and institutions contributing to edge computing?
     \item What collaboration patterns exist among researchers in this field?
     \item How have research topics evolved throughout 2025?
     \item What emerging trends and research gaps can be identified?
-\end{enumerate}
+\end{{enumerate}}
 
 \subsection{{Scope and Methodology}}
 
@@ -215,7 +215,7 @@ carefully designed search queries targeting edge computing and related paradigms
 (fog computing, mobile edge computing, edge AI). We employed a multi-faceted
 analytical approach including:
 
-\begin{itemize}
+\begin{{itemize}}
     \item \textbf{{Bibliometric Analysis:}} Author productivity, category distribution,
           collaboration patterns
     \item \textbf{{Thematic Analysis:}} Topic modeling using LDA and NMF, keyword analysis
@@ -223,7 +223,7 @@ analytical approach including:
     \item \textbf{{Network Analysis:}} Co-authorship networks, research communities
     \item \textbf{{Statistical Analysis:}} Hypothesis testing, correlation analysis,
           trend significance
-\end{itemize}
+\end{{itemize}}
 
 \subsection{{Paper Structure}}
 
@@ -588,7 +588,7 @@ patterns, and thematic evolution.
 
 \subsection{{Key Findings}}
 
-\begin{enumerate}
+\begin{{enumerate}}
     \item \textbf{{Growth:}} Edge computing research continues strong growth with
           increasing interdisciplinary collaboration
     \item \textbf{{AI Integration:}} Machine learning and AI dominate current research
@@ -599,7 +599,7 @@ patterns, and thematic evolution.
           opportunities for broader integration remain
     \item \textbf{{Emerging Themes:}} Federated learning, 6G integration, and edge
           security are rapidly growing areas
-\end{enumerate}
+\end{{enumerate}}
 
 \subsection{{Future Directions}}
 
